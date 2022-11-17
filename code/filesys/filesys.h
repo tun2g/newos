@@ -37,12 +37,118 @@
 #include "sysdep.h"
 #include "openfile.h"
 
+#define FILE_DESCRIPTORS 20
+#define MODE_READWRITE 0
+#define MODE_READ 1
+#define MODE_WRITE 2
 #ifdef FILESYS_STUB 		// Temporarily implement file system calls as 
 				// calls to UNIX, until the real file system
 				// implementation is available
 class FileSystem {
-  public:
-    FileSystem() {}
+
+	private:
+		OpenFile** openFile;
+		int *fileType;
+ 	 public:
+
+   FileSystem() {
+		openFile = new OpenFile*[FILE_DESCRIPTORS];
+		fileType = new int[FILE_DESCRIPTORS];
+		fileType[0]= 0;
+		fileType[1]= 1;
+
+		
+	}
+
+	~FileSystem(){
+		  for (int i = 0; i < FILE_DESCRIPTORS; i++) {
+            if (openFile[i]) delete openFile[i];
+        }
+        delete[] openFile;
+        delete[] fileType;
+	}
+
+	int findFreeSlot(){
+		
+		int freeSlot =-1;
+		for(int i=2;i<FILE_DESCRIPTORS;i++){
+			if(openFile[i]==NULL){
+				freeSlot = i;
+				break;
+			}
+		}
+		return freeSlot;
+	}
+	int Remove(int index){
+		if (index < 2 || index >= FILE_DESCRIPTORS) return -1;
+        if (openFile[index]) {
+            delete openFile[index];
+            openFile[index] = NULL;
+            return 0;
+        }
+        return -1;
+	}
+	int Open(char*fileName, int type){
+		int freeSlot =-1,fileDescriptor = -1;
+		freeSlot = findFreeSlot();
+		if(freeSlot == -1){
+			return -1;
+		}
+
+		if(type == 0){
+			fileDescriptor = OpenForReadWrite(fileName,FALSE);
+			
+		}
+		if(type == 1 ){
+			fileDescriptor = OpenForRead(fileName,FALSE);
+		}
+
+		if(fileDescriptor==-1)
+			return -1;
+		openFile[freeSlot] = new OpenFile(fileDescriptor);
+		fileType[freeSlot] = type;
+
+		return freeSlot;
+
+	}
+
+	int Close(int idx) { 
+		if (idx < 2 || idx >= FILE_DESCRIPTORS) return -1;
+        if (openFile[idx]) {
+            delete openFile[idx];
+            openFile[idx] = NULL;
+            return 0;
+        }
+        return -1;
+	 }
+
+    int Read(char *buffer, int charCount, int idx) {
+        if (idx >= FILE_DESCRIPTORS) return -1;
+        if (openFile[idx] == NULL) return -1;
+        int result = openFile[idx]->Read(buffer, charCount);
+        // if we cannot read enough bytes, we should return -2
+        if (result != charCount) return -2;
+        return result;
+
+		
+    }
+
+    int Write(char *buffer, int charCount, int idx) {
+         if (idx >= FILE_DESCRIPTORS) return -1;
+        if (openFile[idx] == NULL || fileType[idx] == MODE_READ)
+            return -1;
+        return openFile[idx]->Write(buffer, charCount);
+    }
+
+    int Seek(int position, int idx) {
+         if (idx <= 1 || idx >= FILE_DESCRIPTORS) return -1;
+        if (openFile[idx] == NULL) return -1;
+        // use seek(-1) to move to the end of file
+        if (position == -1) position = openFile[idx]->Length();
+        if (position < 0 || position > openFile[idx]->Length()) return -1;
+        return openFile[idx]->Seek(position);
+		// return 0;
+    }
 
     bool Create(char *name) {
 	int fileDescriptor = OpenForWrite(name);
@@ -58,8 +164,10 @@ class FileSystem {
 	  if (fileDescriptor == -1) return NULL;
 	  return new OpenFile(fileDescriptor);
       }
-
-    bool Remove(char *name) { return Unlink(name) == 0; }
+	
+    bool Remove(char* name) {
+ 		return Unlink(name) == 0; 
+	}
 
 };
 

@@ -112,7 +112,7 @@ ifeq ($(hosttype),unknown)
 PROGRAMS = unknownhost
 else
 # change this if you create a new test program!
-PROGRAMS = add halt shell matmult sort segments
+PROGRAMS = add halt shell matmult sort segments readnum printnum printchar readchar RandomNum ReadString string help ascii bbsort createfile open rawfile
 endif
 
 all: $(PROGRAMS)
@@ -132,6 +132,84 @@ add.o: add.c
 add: add.o start.o
 	$(LD) $(LDFLAGS) start.o add.o -o add.coff
 	$(COFF2NOFF) add.coff add
+
+readnum.o: readnum.c
+	$(CC) $(CFLAGS) -c readnum.c
+
+readnum: readnum.o start.o
+	$(LD) $(LDFLAGS) start.o readnum.o -o readnum.coff
+	$(COFF2NOFF) readnum.coff readnum
+
+printnum.o: printnum.c
+	$(CC) $(CFLAGS) -c printnum.c
+
+printnum: printnum.o start.o
+	$(LD) $(LDFLAGS) start.o printnum.o -o printnum.coff
+	$(COFF2NOFF) printnum.coff printnum
+
+readchar.o: readchar.c
+	$(CC) $(CFLAGS) -c readchar.c
+readchar: readchar.o start.o
+	$(LD) $(LDFLAGS) start.o readchar.o -o readchar.coff
+	$(COFF2NOFF) readchar.coff readchar
+printchar.o: printchar.c
+	$(CC) $(CFLAGS) -c printchar.c
+printchar: printchar.o start.o
+	$(LD) $(LDFLAGS) start.o printchar.o -o printchar.coff
+	$(COFF2NOFF) printchar.coff printchar
+RandomNum.o: RandomNum.c
+	$(CC) $(CFLAGS) -c RandomNum.c
+RandomNum: RandomNum.o start.o
+	$(LD) $(LDFLAGS) start.o RandomNum.o -o RandomNum.coff
+	$(COFF2NOFF) RandomNum.coff RandomNum
+ReadString.o: ReadString.c
+	$(CC) $(CFLAGS) -c ReadString.c
+ReadString: ReadString.o start.o
+	$(LD) $(LDFLAGS) start.o ReadString.o -o ReadString.coff
+	$(COFF2NOFF) ReadString.coff ReadString
+
+
+
+string.o: string.c
+	$(CC) $(CFLAGS) -c string.c
+string: string.o start.o
+	$(LD) $(LDFLAGS) start.o string.o -o string.coff
+	$(COFF2NOFF) string.coff string
+
+help.o: help.c
+	$(CC) $(CFLAGS) -c help.c
+help: help.o start.o
+	$(LD) $(LDFLAGS) start.o help.o -o help.coff
+	$(COFF2NOFF) help.coff help
+
+ascii.o: ascii.c
+	$(CC) $(CFLAGS) -c ascii.c
+ascii: ascii.o start.o
+	$(LD) $(LDFLAGS) start.o ascii.o -o ascii.coff
+	$(COFF2NOFF) ascii.coff ascii
+bbsort.o: bbsort.c
+	$(CC) $(CFLAGS) -c bbsort.c
+bbsort: bbsort.o start.o
+	$(LD) $(LDFLAGS) start.o bbsort.o -o bbsort.coff
+	$(COFF2NOFF) bbsort.coff bbsort
+
+createfile.o: createfile.c
+	$(CC) $(CFLAGS) -c createfile.c
+createfile: createfile.o start.o
+	$(LD) $(LDFLAGS) start.o createfile.o -o createfile.coff
+	$(COFF2NOFF) createfile.coff createfile
+
+rawfile.o: rawfile.c
+	$(CC) $(CFLAGS) -c rawfile.c
+rawfile: rawfile.o start.o
+	$(LD) $(LDFLAGS) start.o rawfile.o -o rawfile.coff
+	$(COFF2NOFF) rawfile.coff rawfile
+
+open.o: open.c
+	$(CC) $(CFLAGS) -c open.c
+open: open.o start.o
+	$(LD) $(LDFLAGS) start.o open.o -o open.coff
+	$(COFF2NOFF) open.coff open
 
 shell.o: shell.c
 	$(CC) $(CFLAGS) -c shell.c
