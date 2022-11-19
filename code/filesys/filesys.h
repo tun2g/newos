@@ -79,15 +79,7 @@ class FileSystem {
 		}
 		return freeSlot;
 	}
-	int Remove(int index){
-		if (index < 2 || index >= FILE_DESCRIPTORS) return -1;
-        if (openFile[index]) {
-            delete openFile[index];
-            openFile[index] = NULL;
-            return 0;
-        }
-        return -1;
-	}
+
 	int Open(char*fileName, int type){
 		int freeSlot =-1,fileDescriptor = -1;
 		freeSlot = findFreeSlot();
