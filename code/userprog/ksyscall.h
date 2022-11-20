@@ -174,11 +174,9 @@ int SysCreateFile(char * filename){
   DEBUG(dbgSys, length);
 
   if(length ==0){
-    DEBUG(dbgSys,"Create file fail 1 \n");
     result =-1;
   }
   else if(filename == NULL){
-    DEBUG(dbgSys,"Create file fail 2 \n");
     result = -1;
   }
   else{
@@ -193,14 +191,11 @@ int SysCreateFile(char * filename){
 
 int SysOpen(char*fileName,int type){
 
-  DEBUG(dbgSys, "SysOpen \n");
   if(type  !=0 && type != 1){
       return -1;
   }
   
   int id = kernel->fileSystem->Open(fileName,type);
-
-  DEBUG(dbgSys, "id = "<<id);
 
   return id;
 

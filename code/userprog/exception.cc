@@ -221,7 +221,6 @@ void ExceptionHandler(ExceptionType which)
 			char* buffer = ReadFromMem(virtAddr, charCount);
 			int fileId = kernel->machine->ReadRegister(6);
 
-			DEBUG(dbgFile,"Read " << charCount << " chars from file " << fileId << "\n");
 
 			kernel->machine->WriteRegister(2, SysRead(buffer, charCount, fileId));
 			WriteToMem(buffer, virtAddr, charCount);
@@ -235,8 +234,6 @@ void ExceptionHandler(ExceptionType which)
 			char* buffer = ReadFromMem(virtAddr, charCount);
 			int fileId = kernel->machine->ReadRegister(6);
 
-			DEBUG(dbgFile,
-				"Write " << charCount << " chars to file " << fileId << "\n");
 
 			kernel->machine->WriteRegister(2, SysWrite(buffer, charCount, fileId));
 			WriteToMem(buffer, virtAddr, charCount);
