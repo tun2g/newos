@@ -18,13 +18,13 @@ int main() {
     PrintString("Nhap do dai cua ten file:");
     length =ReadNum();
     PrintString("Nhap ten file:");
-    ReadString(fileName,length);
+    ReadString(fileName,length+1);
     fileid = Open(fileName, MODE_READ);
 
-    read = Read(buffer, 50, fileid);
+    len=Seek(-1,fileid);
+    Seek(0,fileid);
+    read = Read(buffer,len, fileid);
 
-    len = 0;
-    while (buffer[len] != '\0') ++len;
     PrintString("Noi dung: ");
     PrintString(buffer);
     PrintString("\n");

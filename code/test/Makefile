@@ -227,6 +227,11 @@ cat.o: cat.c
 cat: cat.o start.o
 	$(LD) $(LDFLAGS) start.o cat.o -o cat.coff
 	$(COFF2NOFF) cat.coff cat
+close.o: close.c
+	$(CC) $(CFLAGS) -c close.c
+close: close.o start.o
+	$(LD) $(LDFLAGS) start.o close.o -o close.coff
+	$(COFF2NOFF) close.coff close
 concatenate.o: concatenate.c
 	$(CC) $(CFLAGS) -c concatenate.c
 concatenate: concatenate.o start.o

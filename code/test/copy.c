@@ -18,26 +18,7 @@ int main() {
     int fileid2;
     int len;
     int read;
-    //cat
-    // PrintString("Nhap do dai cua ten file:");
-    // length =ReadNum();
-    // PrintString("Nhap ten file:");
-    // ReadString(fileName,length);
-    // fileid = Open(fileName, MODE_READ);
-
-    // read = Read(buffer, 50, fileid);
-
-    // len = 0;
-    // while (buffer[len] != '\0') ++len;
-    // PrintString("Noi dung: ");
-    // PrintString(buffer);
-    // PrintString("\n");
-    // Close(fileid);
-    
-    // Remove("tung.txt");
-
-    //copy
-
+    int lenTxt;
     PrintString("Nhap do dai cua ten file 1:");
     length =ReadNum();
     PrintString("Nhap ten file:");
@@ -46,20 +27,20 @@ int main() {
     PrintString("Nhap do dai cua ten file 2: ");
     length2 =ReadNum();
     PrintString("Nhap ten file: ");
-    ReadString(fileName2,length2);
+    ReadString(fileName2,length2+1);
     fileid2 = Open(fileName2, MODE_READ);
 
-    read = Read(buffer, 50, fileid2);
+    lenTxt=Seek(-1,fileid2);
+    Seek(0,fileid2);
+    read = Read(buffer,lenTxt, fileid2);
 
-    len = 0;
-    while (buffer[len] != '\0') ++len;
     PrintString("Noi dung: ");
     PrintString(buffer);
     PrintString("\n");
     
     CreateFile(fileName);
     fileid=Open(fileName,MODE_READWRITE);
-    write=Write(buffer,len,fileid);
+    write=Write(buffer,lenTxt,fileid);
     Close(fileid);
     Close(fileid2);
     
